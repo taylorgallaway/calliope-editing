@@ -52,7 +52,11 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Please check your email address.' }, { status: 400 });
   }
 
-  const supabaseUrl = process.env.SUPABASE_URL;
+  // Accept the URL with or without a trailing slash or "/rest/v1" pasted on the end.
+  const supabaseUrl = (process.env.SUPABASE_URL || '')
+    .trim()
+    .replace(/\/+$/, '')
+    .replace(/\/rest\/v1$/, '');
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!supabaseUrl || !supabaseKey) {
     console.error('Supabase environment variables are missing.');
